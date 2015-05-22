@@ -176,20 +176,20 @@ class PyKodeEditor(wx.Frame):
     def createStatusBar(self):
         self.statusbar = self.CreateStatusBar()
 
-
     # MenuBar event handlers
     # File menu
     def HandleFileNew(self, event):
         self.tabbedview.CreateNewTab()
 
     def HandleFileOpen(self, event):
+        tab = self.tabbedview.GetCurrentTab()
         dlg = wx.FileDialog(
             self,
             message="Open file",
-            defaultDir=os.getcwd(),
+            defaultDir=tab and os.path.split(tab.path)[0] or os.getcwd(),
             defaultFile="",
             wildcard=__wildcard__,
-            style=wx.FD_OPEN | wx.FD_MULTIPLE | wx.FD_CHANGE_DIR)
+            style=wx.FD_OPEN | wx.FD_MULTIPLE)
 
         if dlg.ShowModal() == wx.ID_OK:
             paths = dlg.GetPaths()
@@ -218,7 +218,7 @@ class PyKodeEditor(wx.Frame):
             defaultDir=dir,
             defaultFile=file,
             wildcard=__wildcard__,
-            style=wx.FD_SAVE | wx.FD_CHANGE_DIR | wx.FD_OVERWRITE_PROMPT)
+            style=wx.FD_SAVE | wx.FD_OVERWRITE_PROMPT)
 
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
